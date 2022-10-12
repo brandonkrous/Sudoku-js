@@ -1,0 +1,20 @@
+body {
+    background-color: #2b2a33;
+    color: #e8e6e3;
+    padding-top: 1%;
+}
+
+#board {
+    background-color: #e8e6e3;
+    border-radius: 2%;
+    margin: auto;
+    display: block;
+    margin-top: 1%;
+}
+
+#board_title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 40pt;
+    text-align: center;
+    margin: auto;
+}
