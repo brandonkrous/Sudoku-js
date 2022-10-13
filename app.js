@@ -28,4 +28,55 @@ for (let i = 0; i <= 9; i++) {
     ctx.stroke();
 }
 
+ctx.font = `${cell_spacing/1.5}px Arial`;
+let metrics = ctx.measureText('5');
+let height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent
+ctx.textBaseline = "hanging";
+ctx.textAlign = 'center';
+let posX = (padding + cell_spacing / 2);
+let posY = (padding + cell_spacing / 2) - (height / 2) + 5;
+ctx.fillText('5', posX, posY);
 
+
+class Cell {
+    constructor(x_coord, y_coord, cells) {
+        this.x_coord = x_coord;
+        this.y_coord = y_coord;
+        this.cells = cells;
+        this.availableNums = [1,2,3,4,5,6,7,8,9];
+        self.triedNums = [];
+    }
+    tryPickNum() {
+        return
+    }
+    isValid(originCell, num) {
+        return
+    }
+    addNum(num) {
+        return
+    }
+    removeNum(num) {
+        return
+    }
+    notifyAdd(num) {
+        return
+    }
+    notifyRemove(num) {
+
+    }
+    topLeftCell() {
+        return
+    }
+    nextCell() {
+        return
+    }
+    previousCell() {
+        return
+    }
+    clearTried() {
+        return
+    }
+    undo() {
+        return
+    }
+}
