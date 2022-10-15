@@ -123,18 +123,37 @@ export class Cell {
     }
 
     topLeftCell() {
-        return
+        let [workingX, workingY] = [this.x_coord, this.y_coord];
+
+        while (workingX % 3 != 0) {
+            workingX -= 1;
+        }
+
+        while (workingY % 3 != 0) {
+            workingY -= 1
+        }
+
+        return [workingX, workingY];
     }
+
     nextCell() {
-        return
+
     }
+
     previousCell() {
         return
     }
+
     clearTried() {
-        return
+        this.triedNums = [];
     }
+
     undo() {
-        return
+        let [nextX, nextY] = this.nextCell();
+        let nextCell = this.cells[nextX][nextY];
+        nextCell.clearTried();
+        this.notifyAdd(self.currentNum);
+        this.triedNums.push(this.currentNum);
+        this.currentNum = 0
     }
 }
