@@ -52,8 +52,7 @@ export class Cell {
         }
         
         // Check box
-        let startX = this.topLeftCell()[0];
-        let startY = this.topLeftCell()[1];
+        let [startX, startY] = this.topLeftCell();
         let cell
         for (let x = 0; x < 3; x++){
             for (let y = 0; y < 3; y++) {
@@ -83,11 +82,46 @@ export class Cell {
     }
 
     notifyAdd(num) {
-        return
+        // Notify row
+        for (let x = 0; x < 9; x++) {
+            this.cells[x][this.y_coord].addNum(num);
+        }
+
+        // Notify collumn
+        for (let y = 0; y < 9; y++) {
+            this.cells[this.x_coord][y].addNum(num);
+        }
+
+        // Notify box
+        let [startX, startY] = this.topLeftCell();
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                this.cells[startX + x][startY + y].addNum(num);
+            }
+        }
     }
+
     notifyRemove(num) {
+        // Notify row
+        for (let x = 0; x < 9; x++) {
+            this.cells[x][this.y_coord].removeNum(num);
+        }
+
+        // Notify collumn
+        for (let y = 0; y < 9; y++) {
+            this.cells[this.x_coord][y].removeNum(num);
+        }
+
+        // Notify box
+        let [startX, startY] = this.topLeftCell();
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                this.cells[startX + x][startY + y].removeNum(num);
+            }
+        }
 
     }
+
     topLeftCell() {
         return
     }
