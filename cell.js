@@ -9,6 +9,7 @@ export class Cell {
         this.triedNums = [];
         this.currentNum = 0;
     }
+
     tryPickNum() {
         // Remove triedNums from availableNums
         tempAvailableNums = [...this.availableNums];
@@ -28,9 +29,45 @@ export class Cell {
         }
         return true;
     }
-    isValid(originCell, num) {
-        return
+
+    isValid(callingCell, num) {
+        // Check Row
+        for (let x = 0; x <= callingCell.x_coord; x++) {
+            let cell = this.cells[x][this.y_coord];
+            if (cell != callingCell) { // skip cell that called this function
+                if (cell.currentNum == num) {
+                    return false
+                }
+            }
+        }
+
+        // Check column
+        for (let y = 0; y < 9; y++) {
+            let cell = this.cells[this.x_coord][y];
+            if (cell != callingCell) {
+                if (cell.currentNum == num) {
+                    return false
+                }
+            }
+        }
+        
+        // Check box
+        let startX = this.topLeftCell()[0];
+        let startY = this.topLeftCell()[1];
+        let cell
+        for (let x = 0; x < 3; x++){
+            for (let y = 0; y < 3; y++) {
+                cell = this.cells[startX + x][startY + y];
+                if (cell != callingCell) {
+                    if (cell.currentNum == num) {
+                        return false
+                    }
+                }
+            }
+        }
+        return true
     }
+
     addNum(num) {
         return
     }
