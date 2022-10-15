@@ -137,11 +137,31 @@ export class Cell {
     }
 
     nextCell() {
+        let [workingX, workingY] = [this.x_coord, this.y_coord];
 
+        if (workingY == 8 && workingX < 8) {
+            workingY = 0;
+            workingX += 1;
+        }
+        else if (workingY < 8) {
+            workingY += 1;
+        }
+        
+        return [workingX, workingY];
     }
 
     previousCell() {
-        return
+        let [workingX, workingY] = [this.x_coord, this.y_coord];
+    
+        if (workingY == 0 && workingX != 0) {
+            workingX -= 1;
+            workingY = 8;
+        }
+        else if (workingY > 0) {
+            workikngY -= 1
+        }
+
+        return [workingX, workingY];
     }
 
     clearTried() {
