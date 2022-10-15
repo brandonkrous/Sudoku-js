@@ -1,3 +1,5 @@
+import { Cell } from "./cell";
+
 const canvas = document.getElementById('board');
 /** @type {CanvasRenderingContext2D} */
 const ctx = canvas.getContext('2d');
@@ -36,4 +38,3 @@ ctx.textAlign = 'center';
 let posX = (padding + cell_spacing / 2);
 let posY = (padding + cell_spacing / 2) - (height / 2) + 5;
 ctx.fillText('5', posX, posY);
-
