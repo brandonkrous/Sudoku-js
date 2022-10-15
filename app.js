@@ -1,4 +1,4 @@
-import { Cell } from "./cell";
+import { Cell } from "./Cell";
 
 const canvas = document.getElementById('board');
 /** @type {CanvasRenderingContext2D} */
