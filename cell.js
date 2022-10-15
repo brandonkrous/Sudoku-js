@@ -68,12 +68,20 @@ export class Cell {
         return true
     }
 
-    addNum(num) {
-        return
+    addNum(callingCell, num) {
+        if (this.isValid(callingCell, num)) {
+            if (not(num in this.availableNums)) {
+                this.availableNums.push(num);
+            }
+        }
     }
+
     removeNum(num) {
-        return
+        if (num in this.availableNums) {
+            this.availableNums.splice(this.availableNums.indexOf(num), 1);
+        }
     }
+
     notifyAdd(num) {
         return
     }
