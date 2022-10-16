@@ -4,6 +4,8 @@ const canvas = document.getElementById('board');
 let sudoku = new Sudoku(canvas);
 
 sudoku.createGrid();
+sudoku.initializeCells();
+sudoku.buildBoard();
 
 // const canvas = document.getElementById('board');
 // /** @type {CanvasRenderingContext2D} */

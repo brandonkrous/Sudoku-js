@@ -10,8 +10,8 @@ export class Cell {
 
     tryPickNum() {
         // Remove triedNums from availableNums
-        tempAvailableNums = [...this.availableNums];
-        for (num in this.availableNums) {
+        let tempAvailableNums = [...this.availableNums];
+        for (let num in this.availableNums) {
             if (num in this.triedNums) {
                 let index = tempAvailableNums.indexOf(num);
                 tempAvailableNums.splice(index, 1);
@@ -21,7 +21,7 @@ export class Cell {
             return false
         }
         else {
-            let randIndex = Math.random() * (tempAvailableNums.length - 1);
+            let randIndex = Math.floor(Math.random() * (tempAvailableNums.length - 1));
             this.currentNum = tempAvailableNums[randIndex];
             this.notifyRemove(this.currentNum);
         }
@@ -144,6 +144,9 @@ export class Cell {
         else if (workingY < 8) {
             workingY += 1;
         }
+        else {
+            throw 'End Of Board Reached'
+        }
         
         return [workingX, workingY];
     }
@@ -156,7 +159,7 @@ export class Cell {
             workingY = 8;
         }
         else if (workingY > 0) {
-            workikngY -= 1
+            workingY -= 1
         }
 
         return [workingX, workingY];

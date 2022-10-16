@@ -46,4 +46,30 @@ export class Sudoku {
             }
         }
     }
+
+    buildBoard() {
+        // Loop each cell; Pick valid number
+        let endOfBoard = false;
+        let [currentX, currentY] = [0, 0];
+        while (!endOfBoard) {
+            let currentCell = this.cells[currentX][currentY];
+            let [previousX, previousY] = currentCell.previousCell();
+            let previousCell = this.cells[previousX][previousY];
+
+            let result = currentCell.tryPickNum();
+            if (result) {
+                try {
+                    [currentX, currentY] = currentCell.nextCell();
+                }
+                catch (error) {
+                    endOfBoard = true;
+                }
+            }
+            else {
+                previousCell.undo();
+                [currentX, currentY] = [previousX, previousY];
+            }
+        }
+        console.log(this.cells);
+    }
 }
