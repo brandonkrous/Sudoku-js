@@ -1,5 +1,3 @@
-
-
 export class Cell {
     constructor(x_coord, y_coord, cells) {
         this.x_coord = x_coord;
