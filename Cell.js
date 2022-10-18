@@ -1,13 +1,14 @@
 export class Cell {
-    constructor(x_coord, y_coord) {
+    constructor(x_coord, y_coord, sudokuObj) {
         this.x_coord = x_coord;
         this.y_coord = y_coord;
         this.availableNums = [1,2,3,4,5,6,7,8,9];
         this.triedNums = [];
         this.currentNum = 0;
+        this.cells = sudokuObj.cells
     }
 
-    tryPickNum(sudokuObj) {
+    tryPickNum() {
         // Remove triedNums from availableNums
         let tempAvailableNums = [...this.availableNums];
         for (let num in this.availableNums) {
@@ -22,15 +23,15 @@ export class Cell {
         else {
             let randIndex = Math.floor(Math.random() * (tempAvailableNums.length));
             this.currentNum = tempAvailableNums[randIndex];
-            this.notifyRemove(sudokuObj, this.currentNum);
+            this.notifyRemove(this.currentNum);
         }
         return true;
     }
 
-    isValid(callingCell, sudokuObj, num) {
+    isValid(callingCell, num) {
         // Check Row
         for (let x = 0; x <= callingCell.x_coord; x++) {
-            let cell = sudokuObj.cells[x][this.y_coord];
+            let cell = this.cells[x][this.y_coord];
             if (cell != callingCell) { // skip cell that called this function
                 if (cell.currentNum == num) {
                     return false
@@ -40,7 +41,7 @@ export class Cell {
 
         // Check column
         for (let y = 0; y < 9; y++) {
-            let cell = sudokuObj.cells[this.x_coord][y];
+            let cell = this.cells[this.x_coord][y];
             if (cell != callingCell) {
                 if (cell.currentNum == num) {
                     return false
@@ -53,7 +54,7 @@ export class Cell {
         let cell
         for (let x = 0; x < 3; x++){
             for (let y = 0; y < 3; y++) {
-                cell = sudokuObj.cells[startX + x][startY + y];
+                cell = this.cells[startX + x][startY + y];
                 if (cell != callingCell) {
                     if (cell.currentNum == num) {
                         return false
@@ -64,8 +65,8 @@ export class Cell {
         return true
     }
 
-    addNum(callingCell, sudokuObj, num) {
-        if (this.isValid(callingCell, sudokuObj, num)) {
+    addNum(callingCell, num) {
+        if (this.isValid(callingCell, num)) {
             let index = this.availableNums.indexOf(num)
             if (index == -1) {
                 this.availableNums.push(num);
@@ -80,42 +81,42 @@ export class Cell {
         }
     }
 
-    notifyAdd(sudokuObj, num) {
+    notifyAdd(num) {
         // Notify row
         for (let x = 0; x < 9; x++) {
-            sudokuObj.cells[x][this.y_coord].addNum(this, sudokuObj, num);
+            this.cells[x][this.y_coord].addNum(this, num);
         }
 
         // Notify collumn
         for (let y = 0; y < 9; y++) {
-            sudokuObj.cells[this.x_coord][y].addNum(this, sudokuObj, num);
+            this.cells[this.x_coord][y].addNum(this, num);
         }
 
         // Notify box
         let [startX, startY] = this.topLeftCell();
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
-                sudokuObj.cells[startX + x][startY + y].addNum(this, sudokuObj, num);
+                this.cells[startX + x][startY + y].addNum(this, num);
             }
         }
     }
 
-    notifyRemove(sudokuObj, num) {
+    notifyRemove(num) {
         // Notify row
         for (let x = 0; x < 9; x++) {
-            sudokuObj.cells[x][this.y_coord].removeNum(num);
+            this.cells[x][this.y_coord].removeNum(num);
         }
 
         // Notify collumn
         for (let y = 0; y < 9; y++) {
-            sudokuObj.cells[this.x_coord][y].removeNum(num);
+            this.cells[this.x_coord][y].removeNum(num);
         }
 
         // Notify box
         let [startX, startY] = this.topLeftCell();
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
-                sudokuObj.cells[startX + x][startY + y].removeNum(num);
+                this.cells[startX + x][startY + y].removeNum(num);
             }
         }
 
@@ -170,11 +171,11 @@ export class Cell {
         this.triedNums = [];
     }
 
-    undo(sudokuObj) {
+    undo() {
         let [nextX, nextY] = this.nextCell();
-        let nextCell = sudokuObj.cells[nextX][nextY];
+        let nextCell = this.cells[nextX][nextY];
         nextCell.clearTried();
-        this.notifyAdd(sudokuObj, this.currentNum);
+        this.notifyAdd(this.currentNum);
         this.triedNums.push(this.currentNum);
         this.currentNum = 0
     }

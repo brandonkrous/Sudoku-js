@@ -20,7 +20,9 @@ export class Sudoku {
         this.createGrid();
         this.initializeCells();
         this.buildBoard();
-    }
+        this.buildPuzzle();
+        this.displayBoard();
+}
 
     createGrid() {
         // Create Grid
@@ -65,7 +67,6 @@ export class Sudoku {
             let result = currentCell.tryPickNum(this);
             if (result) {
                 try {
-                    this.showCell(currentX, currentY);
                     [currentX, currentY] = currentCell.nextCell();
                 }
                 catch (error) {
@@ -80,14 +81,40 @@ export class Sudoku {
         }
     }
 
+    buildPuzzle() {
+        let minCellsToClear = 50;
+        while (minCellsToClear > 0) {
+            // Remove random cell number
+            let randomX = Math.floor(Math.random() * 9);
+            let randomY = Math.floor(Math.random() * 9);
+            let chosenCell = this.cells[randomX][randomY];
+            let num = chosenCell.currentNum;
+            if (num != 0) {
+                chosenCell.notifyAdd(num);
+                chosenCell.currentNum = 0;
+                minCellsToClear -= 1;
+            }
+        }
+    }
+
+    displayBoard() {
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
+                this.showCell(x, y);
+            }
+        }
+    }
+
     showCell(x_coord, y_coord) {
         let currentNum = this.cells[x_coord][y_coord].currentNum;
-        let metrics = this.ctx.measureText(currentNum);
-        let textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-        let posX = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * x_coord);
-        let posY = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * y_coord) - (textHeight / 2);
+        if (currentNum != 0) {
+            let metrics = this.ctx.measureText(currentNum);
+            let textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+            let posX = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * x_coord);
+            let posY = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * y_coord) - (textHeight / 2);
 
-        this.ctx.fillText(currentNum, posX, posY);
+            this.ctx.fillText(currentNum, posX, posY);
+        }
     }
 
     clearCell(x_coord, y_coord) {
@@ -99,4 +126,5 @@ export class Sudoku {
 
         this.ctx.clearRect(x, y, width, height);
     }
+
 }
