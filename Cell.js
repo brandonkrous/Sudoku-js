@@ -20,7 +20,7 @@ export class Cell {
             return false
         }
         else {
-            let randIndex = Math.floor(Math.random() * (tempAvailableNums.length - 1));
+            let randIndex = Math.floor(Math.random() * (tempAvailableNums.length));
             this.currentNum = tempAvailableNums[randIndex];
             this.notifyRemove(sudokuObj, this.currentNum);
         }
@@ -174,7 +174,7 @@ export class Cell {
         let [nextX, nextY] = this.nextCell();
         let nextCell = sudokuObj.cells[nextX][nextY];
         nextCell.clearTried();
-        this.notifyAdd(sudokuObj, self.currentNum);
+        this.notifyAdd(sudokuObj, this.currentNum);
         this.triedNums.push(this.currentNum);
         this.currentNum = 0
     }
