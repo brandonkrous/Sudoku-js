@@ -17,11 +17,13 @@ export class Sudoku {
         for (let i = 0; i < this.cells.length; i++) {
             this.cells[i] = new Array(9);
         }
+        this.cell_padding = 5;
         this.createGrid();
         this.initializeCells();
-        this.buildBoard();
-        this.buildPuzzle();
-        this.displayBoard();
+        // this.buildBoard();
+        // this.buildPuzzle();
+        // this.displayBoard();
+        this.canvas.addEventListener('mousedown', (e) => this.cellClick(e));
 }
 
     createGrid() {
@@ -111,20 +113,27 @@ export class Sudoku {
             let metrics = this.ctx.measureText(currentNum);
             let textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
             let posX = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * x_coord);
-            let posY = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * y_coord) - (textHeight / 2);
+            let posY = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * y_coord) - (textHeight / 2) + (this.cell_spacing * .05);
 
             this.ctx.fillText(currentNum, posX, posY);
         }
     }
 
     clearCell(x_coord, y_coord) {
-        let cell_padding = 5;
-        let x = this.padding + this.cell_spacing * x_coord + cell_padding;
-        let y = this.padding + this.cell_spacing * y_coord + cell_padding;
-        let width = this.cell_spacing - cell_padding * 2;
-        let height = this.cell_spacing - cell_padding * 2;
+        let x = this.padding + this.cell_spacing * x_coord + this.cell_padding;
+        let y = this.padding + this.cell_spacing * y_coord + this.cell_padding;
+        let width = this.cell_spacing - this.cell_padding * 2;
+        let height = this.cell_spacing - this.cell_padding * 2;
 
         this.ctx.clearRect(x, y, width, height);
+    }
+
+    cellClick(event) {
+        let canvasSize = this.canvas.getBoundingClientRect();
+        let x = event.clientX - canvasSize.left;
+        let y = event.clientY - canvasSize.top;
+        console.log(x, y)
+        
     }
 
 }
