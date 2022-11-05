@@ -20,9 +20,9 @@ export class Sudoku {
         this.cell_padding = 5;
         this.createGrid();
         this.initializeCells();
-        // this.buildBoard();
-        // this.buildPuzzle();
-        // this.displayBoard();
+        this.buildBoard();
+        this.buildPuzzle();
+        this.drawBoard();
         this.canvas.addEventListener('mousedown', (e) => this.cellClick(e));
 }
 
@@ -99,29 +99,42 @@ export class Sudoku {
         }
     }
 
-    displayBoard() {
-        for (let x = 0; x < 9; x++) {
-            for (let y = 0; y < 9; y++) {
-                this.showCell(x, y);
+    drawBoard() {
+        this.cells[0][0].editMode = true;
+        this.cells[3][3].editMode = true;
+        for (let cell_x = 0; cell_x < 9; cell_x++) {
+            for (let cell_y = 0; cell_y < 9; cell_y++) {
+                this.showCell(cell_x, cell_y);
             }
         }
     }
 
-    showCell(x_coord, y_coord) {
-        let currentNum = this.cells[x_coord][y_coord].currentNum;
+    showCell(cell_x, cell_y) {
+        let currentNum = this.cells[cell_x][cell_y].currentNum;
+        let currentCell = this.cells[cell_x][cell_y]
+        if (currentCell.editMode == true) {
+            let x = this.padding + this.cell_spacing * cell_x + this.cell_padding;
+            let y = this.padding + this.cell_spacing * cell_y + this.cell_padding;
+            let width = this.cell_spacing - this.cell_padding * 2;
+            let height = this.cell_spacing - this.cell_padding * 2;
+            this.ctx.fillStyle = "rgb(85, 219, 203, .1)";
+            this.ctx.fillRect(x, y, width, height);
+            this.ctx.fillStyle = "black";
+        }
         if (currentNum != 0) {
             let metrics = this.ctx.measureText(currentNum);
             let textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-            let posX = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * x_coord);
-            let posY = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * y_coord) - (textHeight / 2) + (this.cell_spacing * .05);
+            let posX = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * cell_x);
+            let posY = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * cell_y) - (textHeight / 2) + (this.cell_spacing * .05);
 
             this.ctx.fillText(currentNum, posX, posY);
         }
+        this.ctx.stroke();
     }
 
-    clearCell(x_coord, y_coord) {
-        let x = this.padding + this.cell_spacing * x_coord + this.cell_padding;
-        let y = this.padding + this.cell_spacing * y_coord + this.cell_padding;
+    clearCell(cell_x, cell_y) {
+        let x = this.padding + this.cell_spacing * cell_x + this.cell_padding;
+        let y = this.padding + this.cell_spacing * cell_y + this.cell_padding;
         let width = this.cell_spacing - this.cell_padding * 2;
         let height = this.cell_spacing - this.cell_padding * 2;
 
@@ -132,8 +145,43 @@ export class Sudoku {
         let canvasSize = this.canvas.getBoundingClientRect();
         let x = event.clientX - canvasSize.left;
         let y = event.clientY - canvasSize.top;
-        console.log(x, y)
-        
+        if (
+            x > this.padding && x < this.width - this.padding &&
+            y > this.padding && y < this.height - this.padding
+        ) {
+            let [cell_x, cell_y] = this.coordToCell(x, y);
+            this.toggleCellEdit(cell_x, cell_y);
+        }
     }
 
+    coordToCell(x, y) {
+        if (
+            x > this.padding && x < this.width - this.padding &&
+            y > this.padding && y < this.height - this.padding
+        ) {
+            let [collumn_x, collumn_y] = [0, 0]
+            let [start_x, start_y] = [this.padding, this.padding]
+            while (start_x < x) {
+                start_x += this.cell_spacing;
+                collumn_x++;
+            }
+            while(start_y < y) {
+                start_y += this.cell_spacing;
+                collumn_y++;
+            }
+            return [collumn_x - 1, collumn_y - 1];
+        }
+    }
+
+    toggleCellEdit(cell_x, cell_y) {
+            let currentCell = this.cells[cell_x][cell_y];
+            if (currentCell.editMode = false) {
+                currentCell.editMode = true;
+                this.drawBoard();
+                console.log('test')
+            }
+            else {
+                currentCell.editMode = false;
+            }
+    }
 }

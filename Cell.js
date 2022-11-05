@@ -1,11 +1,12 @@
 export class Cell {
-    constructor(x_coord, y_coord, sudokuObj) {
-        this.x_coord = x_coord;
-        this.y_coord = y_coord;
+    constructor(cell_x, cell_y, sudokuObj) {
+        this.cell_x = cell_x;
+        this.cell_y = cell_y;
         this.availableNums = [1,2,3,4,5,6,7,8,9];
         this.triedNums = [];
         this.currentNum = 0;
         this.cells = sudokuObj.cells
+        this.editMode = false;
     }
 
     tryPickNum() {
@@ -30,8 +31,8 @@ export class Cell {
 
     isValid(callingCell, num) {
         // Check Row
-        for (let x = 0; x <= callingCell.x_coord; x++) {
-            let cell = this.cells[x][this.y_coord];
+        for (let x = 0; x <= callingCell.cell_x; x++) {
+            let cell = this.cells[x][this.cell_y];
             if (cell != callingCell) { // skip cell that called this function
                 if (cell.currentNum == num) {
                     return false
@@ -41,7 +42,7 @@ export class Cell {
 
         // Check column
         for (let y = 0; y < 9; y++) {
-            let cell = this.cells[this.x_coord][y];
+            let cell = this.cells[this.cell_x][y];
             if (cell != callingCell) {
                 if (cell.currentNum == num) {
                     return false
@@ -84,12 +85,12 @@ export class Cell {
     notifyAdd(num) {
         // Notify row
         for (let x = 0; x < 9; x++) {
-            this.cells[x][this.y_coord].addNum(this, num);
+            this.cells[x][this.cell_y].addNum(this, num);
         }
 
         // Notify collumn
         for (let y = 0; y < 9; y++) {
-            this.cells[this.x_coord][y].addNum(this, num);
+            this.cells[this.cell_x][y].addNum(this, num);
         }
 
         // Notify box
@@ -104,12 +105,12 @@ export class Cell {
     notifyRemove(num) {
         // Notify row
         for (let x = 0; x < 9; x++) {
-            this.cells[x][this.y_coord].removeNum(num);
+            this.cells[x][this.cell_y].removeNum(num);
         }
 
         // Notify collumn
         for (let y = 0; y < 9; y++) {
-            this.cells[this.x_coord][y].removeNum(num);
+            this.cells[this.cell_x][y].removeNum(num);
         }
 
         // Notify box
@@ -123,7 +124,7 @@ export class Cell {
     }
 
     topLeftCell() {
-        let [workingX, workingY] = [this.x_coord, this.y_coord];
+        let [workingX, workingY] = [this.cell_x, this.cell_y];
 
         while (workingX % 3 != 0) {
             workingX -= 1;
@@ -137,7 +138,7 @@ export class Cell {
     }
 
     nextCell() {
-        let [workingX, workingY] = [this.x_coord, this.y_coord];
+        let [workingX, workingY] = [this.cell_x, this.cell_y];
 
         if (workingY == 8 && workingX < 8) {
             workingY = 0;
@@ -154,7 +155,7 @@ export class Cell {
     }
 
     previousCell() {
-        let [workingX, workingY] = [this.x_coord, this.y_coord];
+        let [workingX, workingY] = [this.cell_x, this.cell_y];
     
         if (workingY == 0 && workingX != 0) {
             workingX -= 1;
