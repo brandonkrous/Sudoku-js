@@ -12,7 +12,7 @@ export class Sudoku {
         this.ctx.font = `${this.cell_spacing/1.5}px Arial`;
         this.ctx.textBaseline = "hanging";
         this.ctx.textAlign = 'center';
-        // Create multidirection array to represent sudoku
+        // Create multidirection array to represent a sudoku puzzle
         this.cells = new Array(9);
         for (let i = 0; i < this.cells.length; i++) {
             this.cells[i] = new Array(9);
@@ -26,10 +26,10 @@ export class Sudoku {
 }
 
     createGrid() {
-        // Create Grid
         for (let i = 0; i <= 9; i++) {
             this.ctx.beginPath();
             if (i % 3 == 0) {
+                // Set every 3 lines bold
                 this.ctx.lineWidth = 3;
                 this.ctx.strokeStyle = "black";
             }
@@ -49,9 +49,10 @@ export class Sudoku {
     }
 
     initializeCells() {
-        for (let x = 0; x < 9; x++) {
-            for (let y = 0; y < 9; y++) {
-                this.cells[x][y] = new Cell(x, y, this);
+        // Generate Cell object for each cell in Cells
+        for (let cell_x = 0; cell_x < 9; cell_x++) {
+            for (let cell_y = 0; cell_y < 9; cell_y++) {
+                this.cells[cell_x][cell_y] = new Cell(cell_x, cell_y, this);
             }
         }
     }
