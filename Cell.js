@@ -7,6 +7,7 @@ export class Cell {
         this.currentNum = 0;
         this.cells = sudokuObj.cells
         this.editMode = false;
+        this.modifiable = false;
     }
 
     tryPickNum() {

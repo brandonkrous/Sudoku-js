@@ -18,7 +18,6 @@ export class Sudoku {
             this.cells[i] = new Array(9);
         }
         this.cell_padding = 5;
-        this.createGrid();
         this.initializeCells();
         this.buildBoard();
         this.buildPuzzle();
@@ -94,14 +93,15 @@ export class Sudoku {
             if (num != 0) {
                 chosenCell.notifyAdd(num);
                 chosenCell.currentNum = 0;
+                chosenCell.modifiable = true;
                 minCellsToClear -= 1;
             }
         }
     }
 
     drawBoard() {
-        this.cells[0][0].editMode = true;
-        this.cells[3][3].editMode = true;
+        this.clearBoard();
+        this.createGrid();
         for (let cell_x = 0; cell_x < 9; cell_x++) {
             for (let cell_y = 0; cell_y < 9; cell_y++) {
                 this.showCell(cell_x, cell_y);
@@ -117,7 +117,7 @@ export class Sudoku {
             let y = this.padding + this.cell_spacing * cell_y + this.cell_padding;
             let width = this.cell_spacing - this.cell_padding * 2;
             let height = this.cell_spacing - this.cell_padding * 2;
-            this.ctx.fillStyle = "rgb(85, 219, 203, .1)";
+            this.ctx.fillStyle = "rgb(85, 219, 203)";
             this.ctx.fillRect(x, y, width, height);
             this.ctx.fillStyle = "black";
         }
@@ -141,6 +141,15 @@ export class Sudoku {
         this.ctx.clearRect(x, y, width, height);
     }
 
+    clearBoard() {
+        let canvasSize = this.canvas.getBoundingClientRect();
+        let x = this.padding;
+        let y = this.padding;
+        let width = canvasSize.width - this.padding * 2;
+        let height = canvasSize.height - this.padding * 2;
+        this.ctx.clearRect(x, y, width, height)
+    }
+
     cellClick(event) {
         let canvasSize = this.canvas.getBoundingClientRect();
         let x = event.clientX - canvasSize.left;
@@ -150,7 +159,11 @@ export class Sudoku {
             y > this.padding && y < this.height - this.padding
         ) {
             let [cell_x, cell_y] = this.coordToCell(x, y);
-            this.toggleCellEdit(cell_x, cell_y);
+            let currentCell = this.cells[cell_x][cell_y];
+            if (currentCell.modifiable == true) {
+                this.toggleCellsEditOff();
+                this.toggleCellEdit(cell_x, cell_y);
+            }
         }
     }
 
@@ -173,12 +186,22 @@ export class Sudoku {
         }
     }
 
+    toggleCellsEditOff() {
+        for (let cell_x = 0; cell_x < 9; cell_x++) {
+            for (let cell_y = 0; cell_y < 9; cell_y++) {
+                let currentCell = this.cells[cell_x][cell_y];
+                currentCell.editMode = false;
+            }
+        }
+        console.log('here');
+        this.drawBoard();
+    }
+
     toggleCellEdit(cell_x, cell_y) {
             let currentCell = this.cells[cell_x][cell_y];
-            if (currentCell.editMode = false) {
+            if (currentCell.editMode == false) {
                 currentCell.editMode = true;
                 this.drawBoard();
-                console.log('test')
             }
             else {
                 currentCell.editMode = false;
