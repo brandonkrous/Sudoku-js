@@ -66,9 +66,10 @@ export class Sudoku {
             let [previousX, previousY] = currentCell.previousCell();
             let previousCell = this.cells[previousX][previousY];
 
-            let result = currentCell.tryPickNum(this);
+            let result = currentCell.tryPickNum(this); // If a num available, result = true
             if (result) {
                 try {
+                    // Look forward. Is it end of board?
                     [currentX, currentY] = currentCell.nextCell();
                 }
                 catch (error) {
@@ -101,6 +102,7 @@ export class Sudoku {
     }
 
     drawBoard() {
+        // Use Canvas to wipe and re-draw lines and numbers
         this.clearBoard();
         this.createGrid();
         for (let cell_x = 0; cell_x < 9; cell_x++) {
@@ -111,9 +113,11 @@ export class Sudoku {
     }
 
     showCell(cell_x, cell_y) {
+        // Display each cells current number
         let currentNum = this.cells[cell_x][cell_y].currentNum;
         let currentCell = this.cells[cell_x][cell_y]
         if (currentCell.editMode == true) {
+            // Add editMode look to cell
             let x = this.padding + this.cell_spacing * cell_x + this.cell_padding;
             let y = this.padding + this.cell_spacing * cell_y + this.cell_padding;
             let width = this.cell_spacing - this.cell_padding * 2;
@@ -151,6 +155,21 @@ export class Sudoku {
         this.ctx.clearRect(x, y, width, height)
     }
 
+    keypress(event) {
+        let activeCell;
+        let currentCell;
+        for (let cell_x = 0; cell_x < 9; cell_x++) {
+            for (let cell_y = 0; cell_y < 9; cell_y++) {
+               currentCell = this.cells[cell_x][cell_y];
+               if (currentCell.editMode == true) {
+                activeCell = currentCell;
+                break
+               }
+            }
+        }
+        console.log(activeCell);
+    }
+
     cellClick(event) {
         let canvasSize = this.canvas.getBoundingClientRect();
         let x = event.clientX - canvasSize.left;
@@ -163,7 +182,9 @@ export class Sudoku {
             let currentCell = this.cells[cell_x][cell_y];
             if (currentCell.modifiable == true) {
                 this.toggleCellsEditOff();
-                this.toggleCellEdit(cell_x, cell_y);
+                currentCell.toggleCellEdit();
+                this.drawBoard();
+                document.addEventListener("keypress", currentCell.keypress.bind(currentCell), {once: true}); 
             }
         }
     }
@@ -194,18 +215,7 @@ export class Sudoku {
                 currentCell.editMode = false;
             }
         }
-        console.log('here');
         this.drawBoard();
     }
 
-    toggleCellEdit(cell_x, cell_y) {
-            let currentCell = this.cells[cell_x][cell_y];
-            if (currentCell.editMode == false) {
-                currentCell.editMode = true;
-                this.drawBoard();
-            }
-            else {
-                currentCell.editMode = false;
-            }
-    }
 }

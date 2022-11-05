@@ -181,4 +181,19 @@ export class Cell {
         this.triedNums.push(this.currentNum);
         this.currentNum = 0
     }
+
+    keypress(event) {
+        console.log(parseInt(event.key))
+    }
+
+    toggleCellEdit() {
+            if (this.editMode == false) {
+                this.editMode = true;
+                // Toggle off when clicking elsewhere
+                document.addEventListener("mousedown", this.toggleCellEdit.bind(this), {once: true})
+            }
+            else {
+                this.editMode = false;
+            }
+    }
 }
