@@ -183,14 +183,15 @@ export class Cell {
     }
 
     keypress(event) {
-        console.log(parseInt(event.key))
+        parseInt(event.key);
+        this.toggleCellEdit();
     }
 
     toggleCellEdit() {
             if (this.editMode == false) {
                 this.editMode = true;
                 // Toggle off when clicking elsewhere
-                document.addEventListener("mousedown", this.toggleCellEdit.bind(this), {once: true})
+                document.addEventListener("mousedown", this.toggleCellEdit.bind(this), {once: true});
             }
             else {
                 this.editMode = false;

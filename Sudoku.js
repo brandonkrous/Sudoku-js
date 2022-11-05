@@ -155,19 +155,14 @@ export class Sudoku {
         this.ctx.clearRect(x, y, width, height)
     }
 
-    keypress(event) {
-        let activeCell;
+    removeEventListeners() {
         let currentCell;
         for (let cell_x = 0; cell_x < 9; cell_x++) {
             for (let cell_y = 0; cell_y < 9; cell_y++) {
-               currentCell = this.cells[cell_x][cell_y];
-               if (currentCell.editMode == true) {
-                activeCell = currentCell;
-                break
-               }
+                currentCell = this.cells[cell_x][cell_y];
+                document.removeEventListener("keypress", currentCell.keypress, {once: true});
             }
         }
-        console.log(activeCell);
     }
 
     cellClick(event) {
@@ -180,11 +175,12 @@ export class Sudoku {
         ) {
             let [cell_x, cell_y] = this.coordToCell(x, y);
             let currentCell = this.cells[cell_x][cell_y];
+            this.removeEventListeners();
             if (currentCell.modifiable == true) {
-                this.toggleCellsEditOff();
                 currentCell.toggleCellEdit();
                 this.drawBoard();
-                document.addEventListener("keypress", currentCell.keypress.bind(currentCell), {once: true}); 
+                currentCell.keypress = currentCell.keypress.bind(currentCell)
+                document.addEventListener("keypress", currentCell.keypress, {once: true}); 
             }
         }
     }
@@ -207,15 +203,4 @@ export class Sudoku {
             return [collumn_x - 1, collumn_y - 1];
         }
     }
-
-    toggleCellsEditOff() {
-        for (let cell_x = 0; cell_x < 9; cell_x++) {
-            for (let cell_y = 0; cell_y < 9; cell_y++) {
-                let currentCell = this.cells[cell_x][cell_y];
-                currentCell.editMode = false;
-            }
-        }
-        this.drawBoard();
-    }
-
 }
