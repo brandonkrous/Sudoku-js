@@ -22,7 +22,8 @@ export class Sudoku {
         this.buildBoard();
         this.buildPuzzle();
         this.drawBoard();
-        this.canvas.addEventListener('mousedown', (e) => this.cellClick(e));
+        this.cellClick = this.cellClick.bind(this);
+        this.canvas.addEventListener('mousedown', this.cellClick);
 }
 
     createGrid() {
@@ -175,12 +176,16 @@ export class Sudoku {
         ) {
             let [cell_x, cell_y] = this.coordToCell(x, y);
             let currentCell = this.cells[cell_x][cell_y];
-            this.removeEventListeners();
-            if (currentCell.modifiable == true) {
+            if (
+                currentCell.modifiable == true &&
+                currentCell.editMode == false
+                ) {
+                this.removeEventListeners();
                 currentCell.toggleCellEdit();
                 this.drawBoard();
-                currentCell.keypress = currentCell.keypress.bind(currentCell)
+                currentCell.keypress = currentCell.keypress.bind(currentCell);
                 document.addEventListener("keypress", currentCell.keypress, {once: true}); 
+                this.drawBoard();
             }
         }
     }

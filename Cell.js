@@ -183,7 +183,7 @@ export class Cell {
     }
 
     keypress(event) {
-        parseInt(event.key);
+        console.log(parseInt(event.key));
         this.toggleCellEdit();
     }
 
@@ -196,5 +196,6 @@ export class Cell {
             else {
                 this.editMode = false;
             }
+    console.log(this.cell_x, this.cell_y, this.editMode)
     }
 }
