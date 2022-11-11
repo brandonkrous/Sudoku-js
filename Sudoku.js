@@ -9,7 +9,11 @@ export class Sudoku {
         this.width = this.canvas.width;
         this.padding = this.width * .02;
         this.cell_spacing = (this.width - this.padding * 2) / 9;
-        this.ctx.font = `${this.cell_spacing/1.5}px Arial`;
+        this.permenantNum_font = `bold ${this.cell_spacing/1.5}px Arial`;
+        this.modifiableNum_font = `${this.cell_spacing/1.5}px Arial`;
+        this.permenantNum_color = "black";
+        this.modifiableNum_color = "grey"
+        this.ctx.font = this.permenantNum_font;
         this.ctx.textBaseline = "hanging";
         this.ctx.textAlign = 'center';
         // Create multidirection array to represent a sudoku puzzle
@@ -32,11 +36,11 @@ export class Sudoku {
             if (i % 3 == 0) {
                 // Set every 3 lines bold
                 this.ctx.lineWidth = 3;
-                this.ctx.strokeStyle = "black";
+                this.ctx.strokeStyle = this.permenantNum_color;
             }
             else {
                 this.ctx.lineWidth = 1;
-                this.ctx.strokeStyle = "grey";
+                this.ctx.strokeStyle = this.modifiableNum_color;
             }
             let line = this.padding + this.cell_spacing * i;
             // Horrizontal Lines
@@ -112,8 +116,8 @@ export class Sudoku {
     }
 
     showCell(cell_x, cell_y) {
-        let currentNum = this.cells[cell_x][cell_y].currentNum;
         let currentCell = this.cells[cell_x][cell_y]
+        let currentNum = currentCell.currentNum;
         if (currentCell.editMode == true) {
             let x = this.padding + this.cell_spacing * cell_x + this.cell_padding;
             let y = this.padding + this.cell_spacing * cell_y + this.cell_padding;
@@ -124,6 +128,12 @@ export class Sudoku {
             this.ctx.fillStyle = "black";
         }
         if (currentNum != 0) {
+            if (currentCell.modifiable == true) {
+                this.ctx.fillStyle = "grey";
+            }
+            else {
+                this.ctx.fillStyle = "black"
+            }
             let metrics = this.ctx.measureText(currentNum);
             let textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
             let posX = this.padding + (this.cell_spacing / 2) + (this.cell_spacing * cell_x);
@@ -131,6 +141,7 @@ export class Sudoku {
 
             this.ctx.fillText(currentNum, posX, posY);
         }
+        this.ctx.fillStyle = "black";
         this.ctx.stroke();
     }
 
@@ -153,6 +164,8 @@ export class Sudoku {
     }
 
     cellClick(event) {
+        this.toggleCellsEditOff();
+        this.drawBoard();
         let canvasSize = this.canvas.getBoundingClientRect();
         let x = event.clientX - canvasSize.left;
         let y = event.clientY - canvasSize.top;
@@ -163,9 +176,13 @@ export class Sudoku {
             let [cell_x, cell_y] = this.coordToCell(x, y);
             let currentCell = this.cells[cell_x][cell_y];
             if (currentCell.modifiable == true) {
-                this.toggleCellsEditOff();
                 // this.toggleCellEdit(cell_x, cell_y);
                 currentCell.toggleCellEdit();
+                if (currentCell.editMode == true) {
+                    currentCell.keypress = currentCell.keypress.bind(currentCell);
+                    document.addEventListener("keydown", currentCell.keypress, {once: true});
+                    document.addEventListener("keydown", this.drawBoard.bind(this), {once: true});
+                }
                 this.drawBoard();
             }
         }
@@ -194,7 +211,11 @@ export class Sudoku {
         for (let cell_x = 0; cell_x < 9; cell_x++) {
             for (let cell_y = 0; cell_y < 9; cell_y++) {
                 let currentCell = this.cells[cell_x][cell_y];
-                currentCell.editMode = false;
+                if (currentCell.editMode == true) {
+                    currentCell.toggleCellEdit();
+                    currentCell.keypress = currentCell.keypress.bind(currentCell);
+                    document.removeEventListener("keypress", currentCell.keypress, {once: true})
+                }
             }
         }
         this.drawBoard();

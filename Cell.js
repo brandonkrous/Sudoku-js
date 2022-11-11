@@ -183,19 +183,26 @@ export class Cell {
     }
 
     keypress(event) {
-        console.log(parseInt(event.key));
-        this.toggleCellEdit();
+        console.log(event.key);
+        if (event.key == "Backspace") {
+            this.currentNum = 0;
+            this.editMode = false;
+        }
+        else if (
+            parseInt(event.key) != NaN &&
+            this.editMode == true
+            ) {
+            this.currentNum = parseInt(event.key);
+            this.editMode = false;
+        }
     }
 
     toggleCellEdit() {
-            if (this.editMode == false) {
-                this.editMode = true;
-                // Toggle off when clicking elsewhere
-                document.addEventListener("mousedown", this.toggleCellEdit.bind(this), {once: true});
-            }
-            else {
-                this.editMode = false;
-            }
-    console.log(this.cell_x, this.cell_y, this.editMode)
+        if (this.editMode == false) {
+            this.editMode = true;
+        }
+        else {
+            this.editMode = false;
+        }
     }
 }
