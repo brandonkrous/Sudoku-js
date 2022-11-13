@@ -6,25 +6,27 @@
         <title>Sudoku</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="styles.css">
-        <script src="Cell.js" type="text/JavaScript"></script>
-        <script src="Sudoku.js" type="text/JavaScript"></script>
+        <script src="Cell.js" type="text/JavaScript" defer></script>
+        <script src="Sudoku.js" type="text/JavaScript" defer></script>
         <script src="app.js" type="text/JavaScript" defer></script>
     </head>
     <body>
+        <h1 id="board_title">Sudoku</h1>
         <div id="game">
-            <h1 id="board_title">Sudoku</h1>
             <canvas id="board" width="600" height="600"></canvas>
             <div id="buttons">
-                <button id="button_1" onclick="sudoku.buttonClick(1)">1</button>
-                <button id="button_2" onclick="sudoku.buttonClick(2)">2</button>
-                <button id="button_3" onclick="sudoku.buttonClick(3)">3</button>
-                <button id="button_4" onclick="sudoku.buttonClick(4)">4</button>
-                <button id="button_5" onclick="sudoku.buttonClick(5)">5</button>
-                <button id="button_6" onclick="sudoku.buttonClick(6)">6</button>
-                <button id="button_7" onclick="sudoku.buttonClick(7)">7</button>
-                <button id="button_8" onclick="sudoku.buttonClick(8)">8</button>
-                <button id="button_9" onclick="sudoku.buttonClick(9)">9</button>
-                <button id="button_del" onclick="sudoku.buttonClick('del')">X</button>
+                <div id="input_buttons">
+                    <button id="button_1" onclick="sudoku.buttonClick(1)">1</button>
+                    <button id="button_2" onclick="sudoku.buttonClick(2)">2</button>
+                    <button id="button_3" onclick="sudoku.buttonClick(3)">3</button>
+                    <button id="button_4" onclick="sudoku.buttonClick(4)">4</button>
+                    <button id="button_5" onclick="sudoku.buttonClick(5)">5</button>
+                    <button id="button_6" onclick="sudoku.buttonClick(6)">6</button>
+                    <button id="button_7" onclick="sudoku.buttonClick(7)">7</button>
+                    <button id="button_8" onclick="sudoku.buttonClick(8)">8</button>
+                    <button id="button_9" onclick="sudoku.buttonClick(9)">9</button>
+                    <button id="button_del" onclick="sudoku.buttonClick('del')">X</button>
+                </div>
                 <!-- <button id="button_undo" onclick="sudoku.buttonClick('undo')">undo</button> -->
             </div>
         </div>
