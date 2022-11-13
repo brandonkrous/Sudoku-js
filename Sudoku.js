@@ -28,7 +28,18 @@ export class Sudoku {
         this.drawBoard();
         this.cellClick = this.cellClick.bind(this);
         this.canvas.addEventListener('mousedown', this.cellClick);
-}
+    }
+
+    activeCell() {
+        for (let cell_x = 0; cell_x < 9; cell_x++) {
+            for (let cell_y = 0; cell_y < 9; cell_y++) {
+                let currentCell = this.cells[cell_x][cell_y];
+                if (currentCell.editMode == true) {
+                    return currentCell;
+                }
+            }
+        }
+    }
 
     createGrid() {
         for (let i = 0; i <= 9; i++) {
@@ -188,6 +199,14 @@ export class Sudoku {
         }
     }
 
+    buttonClick(button) {
+        let currentCell = this.activeCell();
+        let NaN_buttons = ["del", "undo"];
+        if (button in NaN_buttons == false) {
+            console.log(button)
+        }
+    }
+
     coordToCell(x, y) {
         if (
             x > this.padding && x < this.width - this.padding &&
@@ -232,15 +251,4 @@ export class Sudoku {
             }
     }
 
-    get activeCell() {
-        for (let cell_x = 0; cell_x < 9; cell_x++) {
-            for (let cell_y = 0; cell_y < 9; cell_y++) {
-                let currentCell = this.cells[cell_x][cell_y];
-                if (currentCell.editMode == true) {
-                    return currentCell;
-                }
-            }
-        }
-        this.drawBoard();
-    }
 }
