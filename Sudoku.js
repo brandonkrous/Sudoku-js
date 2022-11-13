@@ -1,6 +1,4 @@
-import { Cell } from "./Cell.js";
-
-export class Sudoku {
+class Sudoku {
     constructor(canvasRef) {
         this.canvas = canvasRef;
         /** @type {CanvasRenderingContext2D} */
@@ -202,8 +200,23 @@ export class Sudoku {
     buttonClick(button) {
         let currentCell = this.activeCell();
         let NaN_buttons = ["del", "undo"];
-        if (button in NaN_buttons == false) {
-            console.log(button)
+        if (currentCell != undefined) {
+            if (NaN_buttons.indexOf(button) == -1) {
+                currentCell.currentNum = button;
+                currentCell.toggleCellEdit();
+                this.drawBoard();
+            }
+            else {
+                switch (button) {
+                    case "del":
+                        currentCell.currentNum = 0;
+                        currentCell.toggleCellEdit();
+                        this.drawBoard();
+                        break
+                    case "undo":
+                        break
+                }
+            }
         }
     }
 

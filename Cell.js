@@ -1,4 +1,4 @@
-export class Cell {
+class Cell {
     constructor(cell_x, cell_y, sudokuObj) {
         this.cell_x = cell_x;
         this.cell_y = cell_y;
