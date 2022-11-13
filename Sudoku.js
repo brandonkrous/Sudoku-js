@@ -9,7 +9,7 @@ export class Sudoku {
         this.width = this.canvas.width;
         this.padding = this.width * .02;
         this.cell_spacing = (this.width - this.padding * 2) / 9;
-        this.permenantNum_font = `bold ${this.cell_spacing/1.5}px Arial`;
+        this.permenantNum_font = `${this.cell_spacing/1.5}px Arial`;
         this.modifiableNum_font = `${this.cell_spacing/1.5}px Arial`;
         this.permenantNum_color = "black";
         this.modifiableNum_color = "grey"
@@ -230,5 +230,17 @@ export class Sudoku {
             else {
                 currentCell.editMode = false;
             }
+    }
+
+    get activeCell() {
+        for (let cell_x = 0; cell_x < 9; cell_x++) {
+            for (let cell_y = 0; cell_y < 9; cell_y++) {
+                let currentCell = this.cells[cell_x][cell_y];
+                if (currentCell.editMode == true) {
+                    return currentCell;
+                }
+            }
+        }
+        this.drawBoard();
     }
 }
